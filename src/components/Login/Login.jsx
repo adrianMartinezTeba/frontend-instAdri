@@ -23,9 +23,9 @@ const Login = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  // useEffect(()=>{
-
-  // },[formData,user])
+  useEffect(()=>{
+    console.log(user);
+  },[])
   useEffect(()=>{
 if (isSuccess) {
   navigate('/home')
