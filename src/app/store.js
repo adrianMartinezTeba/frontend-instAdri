@@ -3,7 +3,7 @@ import users from '../features/users/usersSlice'
 
 export const store = configureStore({
   reducer: {
- 
+ posts,
     users
   },
 })
