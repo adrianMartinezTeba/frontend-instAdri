@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "backend-inst-adri.vercel.app";
+const API_URL = "https://backend-inst-adri.vercel.app";
 
 const register = async (userData) => {
   const res = await axios.post(`${API_URL}/users/register`, userData);
