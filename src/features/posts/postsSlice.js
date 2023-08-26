@@ -22,7 +22,7 @@ export const postsSlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(createPost.fulfilled, (state, action) => {
- 
+      state.message = 'Creado correctamente'
     })
     .addCase(createPost.pending, (state) => {
       state.isLoading = true;
@@ -33,7 +33,7 @@ export const postsSlice = createSlice({
   },
 });
 
-export const createPost = createAsyncThunk("exercises/createEercis ",
+export const createPost = createAsyncThunk("posts/createPost ",
 async (post,thunkAPI) => {
     try {
       return await postsService.createPost(post);
