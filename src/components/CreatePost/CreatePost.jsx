@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { createPost, reset } from "../../features/posts/postsSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost } from '../../features/posts/postsSlice';
+
 const CreatePost = () => {
-    const dispatch = useDispatch();
-    const { message } = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
+  const { message } = useSelector((state) => state.posts);
+
   const [postData, setPostData] = useState({
     name: '',
     description: '',
-    image: null, // Cambia el valor inicial a null
+    image: null,
   });
 
   const handleInputChange = (event) => {
@@ -17,7 +19,9 @@ const CreatePost = () => {
       [name]: value,
     }));
   };
-
+  useEffect(() => {
+    console.log(postData);
+  }, [postData])
   const handleImageChange = (event) => {
     const imageFile = event.target.files[0];
     setPostData((prevData) => ({
@@ -25,19 +29,15 @@ const CreatePost = () => {
       image: imageFile,
     }));
   };
-useEffect(()=>{
-console.log(message);
-console.log(postData);
-},[message,dispatch,postData])
-  const handleCreatePost = async (event,postData) => {
-    event.preventDefault();
-   dispatch(createPost(postData))
-  };
 
+  const handleCreatePost = async (event) => {
+    event.preventDefault();
+    await dispatch(createPost(postData));
+  }
   return (
     <div>
       <h2>Crear un nuevo post</h2>
-      <form encType="multipart/form-data" onSubmit={handleCreatePost}>
+      <form enctype="multipart/form-data" onSubmit={handleCreatePost}>
         <div>
           <label>Nombre:</label>
           <input type="text" name="name" value={postData.name} onChange={handleInputChange} />
@@ -48,7 +48,7 @@ console.log(postData);
         </div>
         <div>
           <label>Imagen:</label>
-          <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
+          <input type="file" name="image" onChange={handleImageChange} />
         </div>
         <button type="submit">Crear Post</button>
       </form>

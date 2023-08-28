@@ -12,11 +12,11 @@ const getPostsById = async (id) => {
 };
 const createPost = async (post) => {
     const res = await axios.post(`${API_URL}/posts/create`, post, 
-    // {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data', // Importante: Establecer el encabezado adecuado para el envío de archivos
-    //     },
-    //   }
+    {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Importante: Establecer el encabezado adecuado para el envío de archivos
+        },
+      }
       );
     return res.data;
 }
