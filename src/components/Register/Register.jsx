@@ -1,63 +1,53 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { register } from '../../features/users/usersSlice';
-
+import './Register.scss'
 const Register = () => {
   const dispatch = useDispatch();
-
-  const [userData, setUserData] = useState({
+  const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
 
-  const onChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevState) => ({
-      ...prevState,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    dispatch(register(userData));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+ dispatch(register(formData))
   };
 
   return (
-    <div>
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleRegister}>
-        <div>
-          <label htmlFor="username">Nombre de Usuario:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={userData.username}
-            onChange={onChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Correo electrónico:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={userData.email}
-            onChange={onChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={userData.password}
-            onChange={onChange}
-          />
-        </div>
+    <div className="registro">
+      <h2>Registro</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+        />
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
         <button type="submit">Registrarse</button>
       </form>
     </div>
