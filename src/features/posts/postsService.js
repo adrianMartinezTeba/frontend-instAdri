@@ -1,23 +1,23 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:8080";
-
+const token = JSON.parse(localStorage.getItem("token"));
+const headers = {
+    'Content-Type': 'multipart/form-data', // Importante: Establecer el encabezado adecuado para el envío de archivos
+    'Authorization': `${token}` // Asegúrate de que "token" sea la variable que contiene tu token JWT
+  };
 const getAllPosts = async () => {
     const res = await axios.get(`${API_URL}/posts/all`);
     return res.data;
 };
-const getPostsById = async (id) => {
+const getPostById = async (id) => {
     const res = await axios.get(`${API_URL}/posts/byId/${id}`);
     return res.data;
 };
 const createPost = async (post) => {
-    const res = await axios.post(`${API_URL}/posts/create`, post, 
-    {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Importante: Establecer el encabezado adecuado para el envío de archivos
-        },
-      }
-      );
+    console.log(headers);
+    const res = await axios.post(`${API_URL}/posts/create`, post,{ headers });
+    
     return res.data;
 }
 const deletePost = async (id) => {
@@ -27,7 +27,7 @@ const deletePost = async (id) => {
 const postsService = {
 createPost,
 getAllPosts,
-getPostsById,
+getPostById,
 deletePost
 };
 

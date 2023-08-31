@@ -7,6 +7,7 @@ import Home from "./components/Home/Home";
 import NavBar from "./components/NavBar/NavBar";
 import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/CreatePost/CreatePost";
+import Post from "./components/Post/Post";
 function App() {
 
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/newPost" element={<CreatePost/>}/>
+          <Route path="/post" element={<Post/>}/>
         </Routes>
         <NavBar/>
       </BrowserRouter>
