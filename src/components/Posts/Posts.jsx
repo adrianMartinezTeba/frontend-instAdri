@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import './Posts.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllPosts, getPostById } from '../../features/posts/postsSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Posts = () => {
+  const navigate =useNavigate()
   const dispatch = useDispatch();
   const { isSuccess, isError, posts, post } = useSelector((state) => state.posts);
 
@@ -14,17 +16,13 @@ const Posts = () => {
   }, []);
   useEffect(() => {
     console.log(posts);
+  console.log(post);
+  }, [posts,post]);
   
-  }, [posts]);
-  const handlePost = async (id) => {
-    await dispatch(getPostById(id));
-
-  };
-
   return (
     <div className="posts">
       {posts.map((post) => (
-        <Link key={post._id} to="/post" className="post" onClick={() => handlePost(post._id)}>
+        <Link key={post._id} to={`/post/${post._id}`} className="post" onClick={() => handlePost(post._id)}>
           <img src={`http://localhost:8080/uploads/${post.image}`} alt={post.name} />
           <div className="post-content">
             <h3>{post.name}</h3>

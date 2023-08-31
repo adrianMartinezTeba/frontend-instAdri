@@ -20,7 +20,7 @@ function App() {
           <Route path="/home" element={<Home/>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/newPost" element={<CreatePost/>}/>
-          <Route path="/post" element={<Post/>}/>
+          <Route path="/post/:id" element={<Post/>}/>
         </Routes>
         <NavBar/>
       </BrowserRouter>
