@@ -3,34 +3,59 @@ import axios from "axios";
 const API_URL = "http://localhost:8080";
 
 const register = async (userData) => {
-  const res = await axios.post(`${API_URL}/users/register`, userData);
-  return res.data;
+  const url = `${API_URL}/users/register`;
+  const headers = {
+    'Content-Type': 'multipart/form-data', // Set the content type for file uploads
+    // Add any other custom headers here
+  };
+  try {
+    const res = await axios.post(url, userData,{headers});
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 const login = async (userData) => {
-    const res = await axios.post(`${API_URL}/users/login` , userData);
-    if (res.data) {
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("token", JSON.stringify(res.data.token));
-    }
-    return res.data; //action.payload
-  };
-  const logout = async () => {
-    const token = JSON.parse(localStorage.getItem("token"));
-    const res = await axios.delete(`${API_URL}/users/logout`, {
-      headers: {
-        authorization: token,
-      },
-    });
-    if (res.data) {
-      localStorage.clear();
-    }
+  try {
+    const res = await axios.post(`${API_URL}/users/login`, userData);
+    const { user, token } = res.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(token));
     return res.data;
-  };
+  } catch (error) {
+    // handle error
+  }
+};
+const logout = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const response = await fetch(`${API_URL}/users/logout`, {
+    method: "DELETE",
+    headers: {
+      authorization: token,
+    },
+  });
+  if (response.ok) {
+    localStorage.clear();
+  }
+  return response.json();
+};
+
+const getUserInfo = async () => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const res = await axios.get(`${API_URL}/users/userInfo`, {
+    headers: {
+      authorization: token,
+    },
+  });
+  return res.data;
+};
 const usersService = {
-    register,
-    login,
-    logout
-   
+  register,
+  login,
+  logout,
+  getUserInfo
+
 };
 
 export default usersService;

@@ -47,6 +47,16 @@ export const usersSlice = createSlice({
             .addCase(login.rejected, (state) => {
                 state.isError = true;
             })
+            .addCase(getUserInfo.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.isSuccess = true;
+            })
+            .addCase(getUserInfo.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getUserInfo.rejected, (state) => {
+                state.isError = true;
+            })
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
                 state.token = null;
@@ -77,6 +87,14 @@ export const login = createAsyncThunk("users/login", async (userData, thunkAPI) 
 export const logout = createAsyncThunk("users/logout", async (thunkAPI) => {
     try {
       return await usersService.logout();
+    } catch (error) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  });
+  export const getUserInfo = createAsyncThunk("users/getUserInfo", async (thunkAPI) => {
+    try {
+      return await usersService.getUserInfo();
     } catch (error) {
       console.error(error);
       return thunkAPI.rejectWithValue(message);

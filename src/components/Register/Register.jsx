@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { register } from '../../features/users/usersSlice';
-import './Register.scss'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, reset } from '../../features/users/usersSlice';
+import './Register.scss';
+
 const Register = () => {
   const dispatch = useDispatch();
+  const [imagePreview, setImagePreview] = useState(null);
+  const { isSuccess, isError, user } = useSelector((state) => state.users);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    profileImage: null,
   });
 
   const handleChange = (e) => {
@@ -18,15 +22,33 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
- dispatch(register(formData))
+  const handleImageChange = (event) => {
+    const imageFile = event.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      profileImage: imageFile,
+    }));
+
+    const imagePreviewURL = URL.createObjectURL(imageFile);
+    setImagePreview(imagePreviewURL);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(register(formData));
+    if (isSuccess) {
+      dispatch(reset());
+    }
+  };
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   return (
     <div className="registro">
       <h2>Registro</h2>
-      <form onSubmit={handleSubmit}>
+      <form encType="multipart/form-data" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Nombre de usuario"
@@ -48,6 +70,11 @@ const Register = () => {
           value={formData.password}
           onChange={handleChange}
         />
+        <label>Imagen:</label>
+        <input type="file" name="profileImage" onChange={handleImageChange} />
+        {imagePreview && (
+          <img src={imagePreview} alt="Vista previa de la imagen" />
+        )}
         <button type="submit">Registrarse</button>
       </form>
     </div>
