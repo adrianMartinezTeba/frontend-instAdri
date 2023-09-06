@@ -41,20 +41,49 @@ const logout = async () => {
   return response.json();
 };
 
-const getUserInfo = async () => {
+const getUserLogged = async () => {
   const token = JSON.parse(localStorage.getItem("token"));
-  const res = await axios.get(`${API_URL}/users/userInfo`, {
+  const res = await axios.get(`${API_URL}/users/userLog`, {
     headers: {
       authorization: token,
     },
   });
   return res.data;
 };
+const getUsers = async () => {
+  const res = await axios.get(`${API_URL}/users/all`);
+  console.log(res.data);
+  return res.data;
+}
+const follow = async (userId) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const headers = {
+    'Authorization': token // Add 'Bearer' prefix to the token
+};
+  const res = await axios.post(`${API_URL}/users/follow/${userId}`,{},{headers});
+  return res.data;
+};
+const unFollow = async (userId) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const headers = {
+    'Authorization': token // Add 'Bearer' prefix to the token
+};
+  const res = await axios.delete(`${API_URL}/users/unfollow/${userId}`,{headers});
+  return res.data;
+}
+const getUserById = async (userId) => {
+  const res = await axios.get(`${API_URL}/users/user/${userId}`);
+  return res.data
+}
 const usersService = {
   register,
   login,
   logout,
-  getUserInfo
+  getUserLogged,
+  follow,
+  unFollow,
+  getUsers,
+  getUserById
 
 };
 

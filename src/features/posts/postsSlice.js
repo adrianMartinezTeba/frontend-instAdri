@@ -4,52 +4,55 @@ let post
 const initialState = {
   posts: [],
   post: post ? post : null,
-  isLoading: false,
-  isError: false,
-  message:''
+  isLoadingPost: false,
+  isErrorPost: false,
+  message:'',
+  isSuccessPost: false
 };
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
     reset: (state) => {
-      state.isLoading = false;
-      state.isError = false;
+      state.isLoadingPost = false;
+      state.isErrorPost = false;
       state.message = '';
-
+      state.isSuccessPost = false;
     },
   },
   extraReducers: (builder) => {
     builder
     .addCase(createPost.fulfilled, (state, action) => {
       state.message = 'Creado correctamente'
+      state.isSuccessPost = true
     })
     .addCase(createPost.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPost = true;
     })
     .addCase(createPost.rejected, (state) => {
-      state.isError = true;
+      state.isErrorPost = true;
     })
     .addCase(getAllPosts.fulfilled, (state, action) => {
       state.posts = action.payload
-      state.message = 'Creado correctamente'
+      state.isSuccessPost = true
     })
     .addCase(getAllPosts.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPost = true;
     })
     .addCase(getAllPosts.rejected, (state) => {
-      state.isError = true;
+      state.isErrorPost = true;
     })
     .addCase(getPostById.fulfilled, (state, action) => {
       state.post = action.payload
+      state.isSuccessPost = true
       state.message = 'Obtenido correctamente'
       
     })
     .addCase(getPostById.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPost = true;
     })
     .addCase(getPostById.rejected, (state) => {
-      state.isError = true;
+      state.isErrorPost = true;
     })
   },
 });

@@ -5,11 +5,13 @@ const user = JSON.parse(localStorage.getItem("user"));
 const token = JSON.parse(localStorage.getItem("token"));
 
 const initialState = {
-    user: user ? user : null,
+    users : [],
+    userLogged: user ? user : null,
+    user: null,
     token: token ? token : null,
-    isLoading: false,
-    isError: false,
-    isSuccess: false,
+    isLoadingUser: false,
+    isErrorUser: false,
+    isSuccessUser: false,
     message: ''
 };
 export const usersSlice = createSlice({
@@ -17,50 +19,88 @@ export const usersSlice = createSlice({
     initialState,
     reducers: {
         reset: (state) => {
-            state.isLoading = false;
-            state.isSuccess = false;
-            state.isError = false;
+            state.isLoadingUser = false;
+            state.isSuccessUser = false;
+            state.isErrorUser = false;
             state.message = '';
 
         },
     },
     extraReducers: (builder) => {
         builder
-            // .addCase(register.fulfilled, (state, action) => {
-            //     state.user = action.payload;
-            // })
+            .addCase(register.fulfilled, (state, action) => {
+                state.isSuccessUser = true;
+            })
             .addCase(register.pending, (state) => {
-                state.isLoading = true;
+                state.isLoadingUser = true;
             })
             .addCase(register.rejected, (state) => {
-                state.isError = true;
+                state.isErrorUser = true;
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.user = action.payload.user;
+                state.userLogged = action.payload.user;
                 state.token = action.payload.token;
-                state.isSuccess = true;
+                state.isSuccessUser = true;
                 state.message = action.payload.message;
             })
             .addCase(login.pending, (state) => {
-                state.isLoading = true;
+                state.isLoadingUser = true;
             })
             .addCase(login.rejected, (state) => {
-                state.isError = true;
+                state.isErrorUser = true;
             })
-            .addCase(getUserInfo.fulfilled, (state, action) => {
-                state.user = action.payload;
-                state.isSuccess = true;
+            .addCase(getUserLogged.fulfilled, (state, action) => {
+                state.userLogged = action.payload;
+                state.isSuccessUser = true;
             })
-            .addCase(getUserInfo.pending, (state) => {
-                state.isLoading = true;
+            .addCase(getUserLogged.pending, (state) => {
+                state.isLoadingUser = true;
             })
-            .addCase(getUserInfo.rejected, (state) => {
-                state.isError = true;
+            .addCase(getUserLogged.rejected, (state) => {
+                state.isErrorUser = true;
             })
             .addCase(logout.fulfilled, (state) => {
-                state.user = null;
+                state.userLogged = null;
                 state.token = null;
-              })
+            })
+            .addCase(follow.fulfilled, (state) => {
+                state.isSuccessUser = true;
+            })
+            .addCase(follow.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(follow.rejected, (state) => {
+                state.isErrorUser = true;
+            })
+            .addCase(unFollow.fulfilled, (state) => {
+                state.isSuccessUser = true;
+            })
+            .addCase(unFollow.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(unFollow.rejected, (state) => {
+                state.isErrorUser = true;
+            })
+            .addCase(getUsers.fulfilled, (state,action) => {
+                state.isSuccessUser = true;
+                state.users = action.payload
+            })
+            .addCase(getUsers.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(getUsers.rejected, (state) => {
+                state.isErrorUser = true;
+            })
+            .addCase(getUserById.fulfilled, (state,action) => {
+                state.isSuccessUser = true;
+                state.user = action.payload.user
+            })
+            .addCase(getUserById.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(getUserById.rejected, (state) => {
+                state.isErrorUser = true;
+            })
     },
 });
 
@@ -86,19 +126,51 @@ export const login = createAsyncThunk("users/login", async (userData, thunkAPI) 
 });
 export const logout = createAsyncThunk("users/logout", async (thunkAPI) => {
     try {
-      return await usersService.logout();
+        return await usersService.logout();
     } catch (error) {
-      console.error(error);
-      return thunkAPI.rejectWithValue(message);
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
     }
-  });
-  export const getUserInfo = createAsyncThunk("users/getUserInfo", async (thunkAPI) => {
+});
+export const getUserLogged = createAsyncThunk("users/getUserLogged", async (thunkAPI) => {
     try {
-      return await usersService.getUserInfo();
+        return await usersService.getUserLogged();
     } catch (error) {
-      console.error(error);
-      return thunkAPI.rejectWithValue(message);
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
     }
-  });
+});
+export const follow = createAsyncThunk("users/follow", async (userId, thunkAPI) => {
+    try {
+        return await usersService.follow(userId);
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+export const unFollow = createAsyncThunk("users/unfollow", async (userId, thunkAPI) => {
+    try {
+        return await usersService.unFollow(userId);
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+export const getUsers = createAsyncThunk("users/getUsers", async (thunkAPI) => {
+    try {
+        return await usersService.getUsers();
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+export const getUserById = createAsyncThunk("users/getUserById", async (userId, thunkAPI) => {
+    try {
+        return await usersService.getUserById(userId);
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+})
 export const { reset } = usersSlice.actions;
 export default usersSlice.reducer;

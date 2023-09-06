@@ -8,7 +8,7 @@ const navBar = () => {
         <Link className='navBar-item' to={'/home'}>Home</Link>
         <Link className='navBar-item' to={'/register'}>Lupa</Link>
         <Link className='navBar-item' to={'/newPost'}>Subir post</Link>
-        <Link className='navBar-item' to={'/'}>Welcome</Link>
+        <Link className='navBar-item' to={'/explorer'}>Explorer</Link>
         <Link className='navBar-item' to={'/profile'}>Profile</Link>
 
       </div>

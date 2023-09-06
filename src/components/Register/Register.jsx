@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, reset } from '../../features/users/usersSlice';
+import { useNavigate } from 'react-router-dom';
+import { login, logout, register, reset } from '../../features/users/usersSlice';
 import './Register.scss';
 
 const Register = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const [imagePreview, setImagePreview] = useState(null);
-  const { isSuccess, isError, user } = useSelector((state) => state.users);
+  const { isSuccessUser, isErrorUser, user } = useSelector((state) => state.users);
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -36,15 +38,18 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(register(formData));
-    if (isSuccess) {
-      dispatch(reset());
-    }
   };
 
   useEffect(() => {
     console.log(formData);
   }, [formData]);
-
+  useEffect(() => {
+    console.log(isSuccessUser);
+    if (isSuccessUser) {
+      dispatch(reset())
+      navigate('/login');
+    }
+  }, [isSuccessUser]);
   return (
     <div className="registro">
       <h2>Registro</h2>

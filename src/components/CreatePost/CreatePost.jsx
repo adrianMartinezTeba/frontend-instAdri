@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPost } from '../../features/posts/postsSlice';
 import './CreatePost.scss';
-
+import NavBar from '../NavBar/NavBar'
 const CreatePost = () => {
   const dispatch = useDispatch();
   const { message } = useSelector((state) => state.posts);
@@ -59,6 +59,7 @@ const CreatePost = () => {
         {imagePreview && <img src={imagePreview} alt="Vista previa de la imagen" />}
         <button type="submit">Crear Post</button>
       </form>
+      <NavBar/>
     </div>
   );
 };

@@ -1,24 +1,29 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
-import {  useSelector } from "react-redux";
-const Wellcome = () => {
-    const navigate = useNavigate()
-    const user = JSON.parse(localStorage.getItem("user"));
-    useEffect(()=>{
-      console.log(user);
-setTimeout(() => {
-  if (user) {
-    navigate('/home')
-  }else{
-    navigate('/login')
-  }  
-}, 2000);
-    },[])
-  return (
-    <div>
-      <h2>InstAdri</h2>
-    </div>
-  )
-}
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import './Wellcome.scss';
 
-export default Wellcome
+const Wellcome = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (user) {
+        navigate('/home');
+      } else {
+        navigate('/login');
+      }
+    }, 2000);
+  }, []);
+
+  return (
+    <div className="container">
+      <div className="logo">InstAdri</div>
+      <div className="loading-text">Cargando...</div>
+      <div className="loader"></div>
+    </div>
+  );
+};
+
+export default Wellcome;

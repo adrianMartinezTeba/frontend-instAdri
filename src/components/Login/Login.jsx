@@ -13,7 +13,7 @@ const Login = () => {
     password: '',
   });
   const { email, password } = formData;
-  const { isSuccess, isError, user } = useSelector((state) => state.users);
+  const { isSuccessUser, isErrorUser, user } = useSelector((state) => state.users);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -32,12 +32,12 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate('/home');
+    if (isSuccessUser) {
       dispatch(reset());
-      console.log(isSuccess);
+      navigate('/home');
+      console.log(isSuccessUser);
     }
-  }, [isSuccess]);
+  }, [isSuccessUser]);
 
   return (
     <div className="login">
@@ -67,9 +67,6 @@ const Login = () => {
         <p>
           Si no tienes cuenta, regístrate haciendo click{' '}
           <Link to={'/register'}>aquí</Link>
-        </p>
-        <p>
-          O entra como invitado <Link to={'/home'}>aquí</Link>
         </p>
       </form>
     </div>

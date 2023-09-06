@@ -3,9 +3,9 @@ import './Post.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostById, reset } from '../../features/posts/postsSlice';
 import { useParams } from 'react-router-dom';
-
+import NavBar from '../NavBar/NavBar';
 const Post = () => {
-  const { isLoading, isError, post } = useSelector((state) => state.posts);
+  const { isLoadingPost, isErrorPost, post } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -20,10 +20,10 @@ if (post) {
 },[post])
   return (
     <div>
-      {isError ? (
+      {isErrorPost ? (
         <p>Error al cargar el post</p>
-      ) : isLoading ? (
-        <p>cargaabdi</p>
+      ) : isLoadingPost ? (
+        <p>cargando</p>
       ) : post ? (
         <div className="post">
           <img src={`http://localhost:8080/uploads/${post.image}`} alt={post.name} />
@@ -34,6 +34,7 @@ if (post) {
           </div>
         </div>
       ) : null}
+      <NavBar/>
     </div>
   );
 };
