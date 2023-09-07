@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { follow, unFollow, getUserById, reset,getUserLogged } from '../../features/users/usersSlice';
 import { useParams } from 'react-router-dom';
+import NavBar from '../NavBar/NavBar';
 import './User.scss';
 
 const User = () => {
@@ -13,7 +14,7 @@ const User = () => {
   useEffect(() => {
     dispatch(getUserById(id));
     dispatch(getUserLogged());
-  }, [dispatch, id]);
+  }, []);
 
   useEffect(() => {
     if (userLogged && user) {
@@ -37,7 +38,6 @@ useEffect(() => {
 const handleFollow = async (id) => {
   try {
     await dispatch(follow(id));
-    await dispatch(getUserById(id));
     setBtnFollow(true); // Actualiza el estado local
   } catch (error) {
     console.error('Error al seguir al usuario', error);
@@ -48,7 +48,6 @@ const handleFollow = async (id) => {
 const handleUnFollow = async (id) => {
   try {
     await dispatch(unFollow(id));
-    await dispatch(getUserById(id));
     setBtnFollow(false); // Actualiza el estado local
   } catch (error) {
     console.error('Error al dejar de seguir al usuario', error);
@@ -88,6 +87,7 @@ const handleUnFollow = async (id) => {
           </button>
         </div>
       ) : null}
+      <NavBar/>
     </div>
   );
 };

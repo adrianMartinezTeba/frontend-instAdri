@@ -26,11 +26,29 @@ const deletePost = async (id) => {
     const res = await axios.delete(`${API_URL}/posts/delete/${id}`, exercise);
     return res.data;
 }
+const like = async (id) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const headers = {
+        Authorization: token
+    };
+    const res = await axios.post(`${API_URL}/posts/like/${id}`,{},{headers});
+    return res.data;
+}
+const unLike = async (id) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const headers = {
+        Authorization: token
+    }
+    const res = await axios.delete(`${API_URL}/posts/unLike/${id}`,{headers});
+    return res.data;
+}
 const postsService = {
 createPost,
 getAllPosts,
 getPostById,
-deletePost
+deletePost,
+like,
+unLike
 };
 
 export default postsService;

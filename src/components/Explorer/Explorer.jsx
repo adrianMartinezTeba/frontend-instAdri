@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './Explorer.scss';
 import NavBar from '../NavBar/NavBar.jsx';
-import { getAllPosts } from '../../features/posts/postsSlice';
-import { getUsers } from '../../features/users/usersSlice';
+import { getAllPosts,resetPost } from '../../features/posts/postsSlice';
+import { getUsers,resetUser } from '../../features/users/usersSlice';
 import { Link } from 'react-router-dom';
 const Explorer = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,8 @@ const Explorer = () => {
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getAllPosts());
-    
+    dispatch(resetUser())
+    dispatch(resetPost())
   }, []);
 
   useEffect(() => {

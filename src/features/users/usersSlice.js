@@ -23,8 +23,10 @@ export const usersSlice = createSlice({
             state.isSuccessUser = false;
             state.isErrorUser = false;
             state.message = '';
-
         },
+        resetUser: (state) => {
+            state.user = null;
+          },
     },
     extraReducers: (builder) => {
         builder
@@ -63,8 +65,11 @@ export const usersSlice = createSlice({
                 state.userLogged = null;
                 state.token = null;
             })
-            .addCase(follow.fulfilled, (state) => {
+            .addCase(follow.fulfilled, (state,action) => {
                 state.isSuccessUser = true;
+                state.user = action.payload.userFollowed;
+                state.userLogged = action.payload.userWhoFollowed
+
             })
             .addCase(follow.pending, (state) => {
                 state.isLoadingUser = true;
@@ -72,8 +77,10 @@ export const usersSlice = createSlice({
             .addCase(follow.rejected, (state) => {
                 state.isErrorUser = true;
             })
-            .addCase(unFollow.fulfilled, (state) => {
+            .addCase(unFollow.fulfilled, (state,action) => {
                 state.isSuccessUser = true;
+                state.user = action.payload.userUnfollowed;
+                state.userLogged = action.payload.userWhoUnFollow;
             })
             .addCase(unFollow.pending, (state) => {
                 state.isLoadingUser = true;
@@ -172,5 +179,5 @@ export const getUserById = createAsyncThunk("users/getUserById", async (userId, 
         return thunkAPI.rejectWithValue(message);
     }
 })
-export const { reset } = usersSlice.actions;
+export const { reset,resetUser } = usersSlice.actions;
 export default usersSlice.reducer;
