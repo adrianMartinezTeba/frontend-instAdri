@@ -1,69 +1,19 @@
-/* Explorer.scss */
+.explorer{
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+.explorer-container{
+  display: flex;
+  flex-direction: column;
+  img{
+    max-width: 300px;
+    height: 500px;
+  }
+}
+.navBar-explorer{
+  display: flex;
 
-.explorer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .explorer-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  
-    button {
-      background-color: transparent;
-      border: none;
-      margin: 0 10px;
-      padding: 10px;
-      font-size: 1rem;
-      cursor: pointer;
-      outline: none;
-      color: #0095f6;
-      font-weight: bold;
-  
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-  
-  .explorer-users,
-  .explorer-posts {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  
-  .explorer-users,
-  .explorer-posts > a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .explorer-users img,
-  .explorer-posts img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .explorer-users p,
-  .explorer-posts p {
-    font-size: 1rem;
-    margin: 0;
-    margin-top: 10px;
-    color: #262626;
-  }
-  
-  .explorer-posts p {
-    font-weight: bold;
-  }
-  
-  .explorer-posts img {
-    border-radius: 5px;
-  }
-  
-  
+
+}

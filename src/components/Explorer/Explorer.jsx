@@ -1,76 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './Explorer.scss';
-import NavBar from '../NavBar/NavBar.jsx';
-import { getAllPosts,resetPost } from '../../features/posts/postsSlice';
-import { getUsers,resetUser } from '../../features/users/usersSlice';
+import NavBar from '../NavBar/NavBar';
+import { getAllPosts, resetPost } from '../../features/posts/postsSlice';
+import { resetUser } from '../../features/users/usersSlice';
 import { Link } from 'react-router-dom';
+
 const Explorer = () => {
   const dispatch = useDispatch();
-  const { users, isSuccessUser, isErrorUser } = useSelector((state) => state.users);
-  const { posts, isSuccessPost, isErrorPost } = useSelector((state) => state.posts);
- const [orderedPosts,setOrderedPosts] = useState([]);
- const [orderedUsers,setOrderedUsers] = useState([]);
+  const { posts, isSuccessPost } = useSelector((state) => state.posts);
+
   useEffect(() => {
-    dispatch(getUsers());
+    // Llamar a la acción para obtener todos los posts cuando el componente se monta
     dispatch(getAllPosts());
-    dispatch(resetUser())
-    dispatch(resetPost())
-  }, []);
 
-  useEffect(() => {
-
-  }, [posts, users]);
-
-  // Variables de estado para controlar qué lista mostrar
-  const [showUsers, setShowUsers] = useState(true);
-  const [showPosts, setShowPosts] = useState(false);
-
-  // Funciones de manejo de eventos para cambiar el estado de las variables
-  const showUsersList = () => {
-    setShowUsers(true);
-    setShowPosts(false);
-  };
-
-  const showPostsList = () => {
-    setShowUsers(false);
-    setShowPosts(true);
-  };
+    // Resetear el estado de usuarios y posts cuando el componente se monta
+    dispatch(resetUser());
+    dispatch(resetPost());
+  }, [dispatch]);
 
   return (
-    <div>
-     
-      <div className="explorer-buttons">
-        <button onClick={showUsersList}>Mostrar Usuarios</button>
-        <button onClick={showPostsList}>Mostrar Posts</button>
+    <div className="explorer">
+      <div className="explorer-container">
+        {isSuccessPost && posts ? (
+          <div className="explorer-posts">
+            {posts.map((post) => (
+              <Link key={post._id} to={`/post/${post._id}`}>
+                <p>{post.name}</p>
+                <img
+                  src={`http://localhost:8080/uploads/${post.image}`}
+                  alt={post.name}
+                />
+                <p>Likes: {post.likes.length}</p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          // Puedes agregar un mensaje de carga aquí si es necesario
+          <p>Cargando posts...</p>
+        )}
       </div>
-      {showUsers && (
-        <div className="explorer-users">
-          {/* Renderiza la lista de usuarios */}
-          {users.map((user) => (
-            <Link key={user._id} to={`/user/${user._id}`}>
-              <img src={`http://localhost:8080/uploads/${user.profileImage}`} alt={user.username} />
-              <p>{user.username}</p>
-              <p>{user.followers}</p>
-              {/* Agrega más detalles del usuario según sea necesario */}
-            </Link>
-          ))}
-        </div>
-      )}
-      {showPosts && (
-        <div className="explorer-posts">
-          {/* Renderiza la lista de posts */}
-          {posts.map((post) => (
-            <Link key={post._id} to={`/post/${post._id}`}>
-              <p>{post.name}</p>
-              <img src={`http://localhost:8080/uploads/${post.image}`} alt={post.name} />
-              <p>Likes: {post.likes}</p>
-              {/* Agrega más detalles del post según sea necesario */}
-            </Link>
-          ))}
-        </div>
-      )}
-       <NavBar />
+      <div className="navBar-explorer">
+        <NavBar />
+      </div>
     </div>
   );
 };

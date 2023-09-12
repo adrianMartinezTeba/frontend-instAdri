@@ -52,7 +52,6 @@ const getUserLogged = async () => {
 };
 const getUsers = async () => {
   const res = await axios.get(`${API_URL}/users/all`);
-  console.log(res.data);
   return res.data;
 }
 const follow = async (userId) => {
@@ -75,6 +74,11 @@ const getUserById = async (userId) => {
   const res = await axios.get(`${API_URL}/users/user/${userId}`);
   return res.data
 }
+const getByName = async (name) => {
+  const res = await axios.get(`${API_URL}/users/byName/${name}`);
+  console.log(res.data);
+  return res.data
+}
 const usersService = {
   register,
   login,
@@ -83,7 +87,8 @@ const usersService = {
   follow,
   unFollow,
   getUsers,
-  getUserById
+  getUserById,
+  getByName
 
 };
 

@@ -26,6 +26,7 @@ export const usersSlice = createSlice({
         },
         resetUser: (state) => {
             state.user = null;
+            state.users = []
           },
     },
     extraReducers: (builder) => {
@@ -108,6 +109,16 @@ export const usersSlice = createSlice({
             .addCase(getUserById.rejected, (state) => {
                 state.isErrorUser = true;
             })
+            .addCase(userByName.fulfilled, (state,action) => {
+                state.isSuccessUser = true;
+                state.users = action.payload
+            })
+            .addCase(userByName.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(userByName.rejected, (state) => {
+                state.isErrorUser = true;
+            })
     },
 });
 
@@ -174,6 +185,14 @@ export const getUsers = createAsyncThunk("users/getUsers", async (thunkAPI) => {
 export const getUserById = createAsyncThunk("users/getUserById", async (userId, thunkAPI) => {
     try {
         return await usersService.getUserById(userId);
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+export const userByName = createAsyncThunk("users/getUserByName", async (name, thunkAPI) => {
+    try {
+        return await usersService.getByName(name);
     } catch (error) {
         console.error(error);
         return thunkAPI.rejectWithValue(message);

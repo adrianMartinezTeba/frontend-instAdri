@@ -4,12 +4,12 @@ import Wellcome from "./components/Wellcome/Wellcome";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Home from "./components/Home/Home";
-import NavBar from "./components/NavBar/NavBar";
 import Profile from "./components/Profile/Profile";
 import CreatePost from "./components/CreatePost/CreatePost";
 import Post from "./components/Post/Post";
 import Explorer from "./components/Explorer/Explorer";
 import User from "./components/User/User";
+import SearUser from "./components/SearUser/SearUser";
 function App() {
 
   return (
@@ -25,6 +25,7 @@ function App() {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/newPost" element={<CreatePost/>}/>
           <Route path="/post/:id" element={<Post/>}/>
+          <Route path="/searchUser" element={<SearUser/>}/>
         </Routes>
       </BrowserRouter>
     </>
