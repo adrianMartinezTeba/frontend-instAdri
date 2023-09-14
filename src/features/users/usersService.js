@@ -79,6 +79,14 @@ const getByName = async (name) => {
   console.log(res.data);
   return res.data
 }
+const isFollowing = async (userId) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const headers = {
+    'Authorization': token // Add 'Bearer' prefix to the token
+}
+const res = await axios.get(`${API_URL}/users/isFollowing/${userId}`,{headers});
+return res.data
+}
 const usersService = {
   register,
   login,
@@ -88,7 +96,8 @@ const usersService = {
   unFollow,
   getUsers,
   getUserById,
-  getByName
+  getByName,
+  isFollowing
 
 };
 

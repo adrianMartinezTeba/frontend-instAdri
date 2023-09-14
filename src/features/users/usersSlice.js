@@ -9,6 +9,7 @@ const initialState = {
     userLogged: user ? user : null,
     user: null,
     token: token ? token : null,
+    isFollowingState: false,
     isLoadingUser: false,
     isErrorUser: false,
     isSuccessUser: false,
@@ -119,6 +120,17 @@ export const usersSlice = createSlice({
             .addCase(userByName.rejected, (state) => {
                 state.isErrorUser = true;
             })
+            .addCase(isFollowing.fulfilled, (state,action) => {
+                state.isSuccessUser = true;
+                state.isFollowingState = action.payload.isUserLoggedFollowingUser
+
+            })
+            .addCase(isFollowing.pending, (state) => {
+                state.isLoadingUser = true;
+            })
+            .addCase(isFollowing.rejected, (state) => {
+                state.isErrorUser = true;
+            })
     },
 });
 
@@ -193,6 +205,14 @@ export const getUserById = createAsyncThunk("users/getUserById", async (userId, 
 export const userByName = createAsyncThunk("users/getUserByName", async (name, thunkAPI) => {
     try {
         return await usersService.getByName(name);
+    } catch (error) {
+        console.error(error);
+        return thunkAPI.rejectWithValue(message);
+    }
+})
+export const isFollowing = createAsyncThunk("users/isFollowing", async (userId, thunkAPI) => {
+    try {
+        return await usersService.isFollowing(userId);
     } catch (error) {
         console.error(error);
         return thunkAPI.rejectWithValue(message);

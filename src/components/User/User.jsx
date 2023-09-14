@@ -1,60 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { follow, unFollow, getUserById, reset,getUserLogged } from '../../features/users/usersSlice';
-import { useParams } from 'react-router-dom';
+import { follow, unFollow, getUserById, reset, getUserLogged ,isFollowing} from '../../features/users/usersSlice';
+import { Await, useParams } from 'react-router-dom';
 import NavBar from '../NavBar/NavBar';
 import './User.scss';
 
 const User = () => {
   const dispatch = useDispatch();
-  const [btnFollow, setBtnFollow] = useState(false);
-  const { userLogged, user, isSuccessUser, isErrorUser, isLoadingUser } = useSelector((state) => state.users);
+  const { userLogged, user, isSuccessUser, isErrorUser, isLoadingUser,isFollowingState } = useSelector((state) => state.users);
   const { id } = useParams();
+  const [btnFollow, setBtnFollow] = useState(isFollowingState);
 
   useEffect(() => {
+    dispatch(isFollowing(id));
     dispatch(getUserById(id));
     dispatch(getUserLogged());
   }, []);
 
-  useEffect(() => {
-    if (userLogged && user) {
-      // Verificar si el usuario logueado sigue al usuario del perfil
-      console.log(userLogged);
-      console.log(user._id);
-      const isFollowing = userLogged.following.includes(user._id);
-      console.log(isFollowing);
-      setBtnFollow(isFollowing);
+ useEffect(() => {
+   if (isFollowingState === true) {
+    setBtnFollow(true);
+   }else{
+    setBtnFollow(false);
+   }
+   console.log(btnFollow);
+ },[isFollowingState])
+  const handleFollow = async () => {
+    try {
+      await dispatch(follow(user._id));
+      setBtnFollow(!btnFollow);
+    } catch (error) {
+      console.error('Error al seguir al usuario', error);
     }
-  }, [userLogged, user]);
-
-  useEffect(() => {
-    if (isSuccessUser) {
-      dispatch(reset());
+  }
+  const handleUnFollow = async () => {
+    try {
+      await dispatch(unFollow(user._id));
+      setBtnFollow(!btnFollow);
+    } catch (error) {
+      console.error('Error al dejar de seguir al usuario', error);
     }
-  }, [isSuccessUser]);
-useEffect(() => {
-  
-},[btnFollow])
-const handleFollow = async (id) => {
-  try {
-    await dispatch(follow(id));
-    setBtnFollow(true); // Actualiza el estado local
-  } catch (error) {
-    console.error('Error al seguir al usuario', error);
-    // Puedes mostrar un mensaje de error o realizar otras acciones aquí
   }
-}
-
-const handleUnFollow = async (id) => {
-  try {
-    await dispatch(unFollow(id));
-    setBtnFollow(false); // Actualiza el estado local
-  } catch (error) {
-    console.error('Error al dejar de seguir al usuario', error);
-    // Puedes mostrar un mensaje de error o realizar otras acciones aquí
+useEffect (()=> {
+  if (isSuccessUser) {
+    dispatch(reset());  
   }
-}
-
+},[isSuccessUser])
   return (
     <div className="user-profile">
       {isErrorUser ? (
@@ -82,12 +73,23 @@ const handleUnFollow = async (id) => {
               <strong>{user.following?.length}</strong> Siguiendo
             </div>
           </div>
-         <button onClick={() => (btnFollow ? handleUnFollow(user._id) : handleFollow(user._id))}>
-            {btnFollow ? 'Unfollow' : 'Follow'}
-          </button>
+          {
+            btnFollow === true ? (
+              <button onClick={() => (handleUnFollow(user._id))}>
+                Unfollow
+                </button>
+            ) : (
+              <button onClick={() => (handleFollow(user._id))}>
+                Follow
+              </button>
+            )
+          }
+          {/* <button onClick={() => (btnFollow ? handleUnFollow(user._id) : handleFollow(user._id))}>
+            {btnFollow  ? 'Unfollow' : 'Follow'}
+          </button> */}
         </div>
       ) : null}
-      <NavBar/>
+      <NavBar />
     </div>
   );
 };
